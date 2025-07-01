@@ -14,32 +14,21 @@ jobs:
       - name: Cloner le dépôt
         uses: actions/checkout@v3
 
-      - name: Installer Chocolatey
-        run: |
-          Set-ExecutionPolicy Bypass -Scope Process -Force
-          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-
-      - name: Installer MinGW-w64 via Chocolatey
+      - name: Installer MinGW via Chocolatey
         run: choco install mingw -y
 
       - name: Ajouter MinGW au PATH
+        shell: powershell
         run: |
           echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
-      - name: Vérifier GCC
-        run: gcc --version
-
-      - name: Cloner et compiler Raylib
+      - name: Télécharger Raylib précompilée
         run: |
-          git clone https://github.com/raysan5/raylib.git
-          cd raylib
-          mkdir build
-          cd build
-          cmake .. -G "MinGW Makefiles"
-          cmake --build .
-          cmake --install . --prefix "${{ github.workspace }}/raylib"
+          curl -L -o raylib.zip https://github.com/raysan5/raylib/releases/download/5.0/raylib-5.0_win64_mingw-w64.zip
+          tar -xf raylib.zip
+          move raylib-5.0_win64_mingw-w64 raylib
 
-      - name: Configurer le projet
+      - name: Configurer le projet avec CMake
         run: |
           cmake -B build -G "MinGW Makefiles" `
             -DCMAKE_PREFIX_PATH="${{ github.workspace }}/raylib" `
@@ -48,9 +37,9 @@ jobs:
       - name: Compiler le projet
         run: cmake --build build --config Release
 
-      - name: Vérifier l'exécutable
+      - name: Vérifier la présence de l'exécutable
         run: |
-          if (Test-Path "build/raylib_modular.exe") {
+          if (Test-Path "build/raylib_project.exe") {
             Write-Output "L'exécutable est présent."
           } else {
             Write-Error "L'exécutable est manquant."
