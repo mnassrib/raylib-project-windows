@@ -1,0 +1,46 @@
+name: CI Windows - Build Raylib Project
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Cloner le dépôt
+        uses: actions/checkout@v3
+
+      - name: Installer MinGW-w64 via Chocolatey
+        run: choco install mingw -y
+
+      - name: Ajouter MinGW au PATH
+        run: |
+          echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" >> $env:GITHUB_PATH
+
+      - name: Télécharger Raylib précompilée (Windows)
+        run: |
+          curl -L -o raylib.zip https://github.com/raysan5/raylib/releases/download/5.0/raylib-5.0_win64_mingw-w64.zip
+          tar -xf raylib.zip
+          mv raylib-5.0_win64_mingw-w64 raylib
+
+      - name: Configurer le projet avec CMake
+        run: |
+          cmake -B build -G "MinGW Makefiles" `
+            -DCMAKE_PREFIX_PATH="${{ github.workspace }}/raylib" `
+            -DCMAKE_BUILD_TYPE=Release
+
+      - name: Compiler le projet
+        run: cmake --build build --config Release
+
+      - name: Vérifier que l'exécutable a été généré
+        run: |
+          if (Test-Path "build/raylib_modular.exe") {
+            Write-Output "xécutable trouvé"
+          } else {
+            Write-Error "Exécutable manquant"
+            exit 1
+          }
