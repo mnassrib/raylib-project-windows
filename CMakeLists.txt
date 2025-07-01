@@ -20,7 +20,7 @@ add_executable(${PROJECT_NAME}
 # --- Trouver Raylib et lier selon l'OS ---
 if(WIN32)
     # Configuration spécifique à Windows
-    #set(CMAKE_PREFIX_PATH "C:/raylib")  # Adapté à votre installation
+    set(CMAKE_PREFIX_PATH "C:/raylib")  # Adapté à votre installation
     find_package(raylib REQUIRED)
     target_link_libraries(${PROJECT_NAME} raylib winmm) 
     

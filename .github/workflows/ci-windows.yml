@@ -20,28 +20,35 @@ jobs:
       - name: Ajouter MinGW au PATH
         shell: powershell
         run: |
-          echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          echo "C:\ProgramData\mingw64\mingw64\bin" | Out-File -Append -Encoding ascii $env:GITHUB_PATH
 
-      - name: Télécharger Raylib précompilée
+      - name: Cloner et compiler Raylib
+        shell: cmd
         run: |
-          curl -L -o raylib.zip https://github.com/raysan5/raylib/releases/download/5.0/raylib-5.0_win64_mingw-w64.zip
-          tar -xf raylib.zip
-          move raylib-5.0_win64_mingw-w64 raylib
+          git clone https://github.com/raysan5/raylib.git
+          cd raylib
+          rmdir /s /q build
+          mkdir build
+          cd build
+          cmake -G "MinGW Makefiles" -DBUILD_EXAMPLES=OFF ..
+          cmake --build .
+          cmake --install . --prefix "C:/raylib"
 
-      - name: Configurer le projet avec CMake
+      - name: Configurer le projet
+        shell: cmd
         run: |
-          cmake -B build -G "MinGW Makefiles" `
-            -DCMAKE_PREFIX_PATH="${{ github.workspace }}/raylib" `
-            -DCMAKE_BUILD_TYPE=Release
+          cmake -B build -G "MinGW Makefiles" -DCMAKE_PREFIX_PATH="C:/raylib"
 
       - name: Compiler le projet
+        shell: cmd
         run: cmake --build build --config Release
 
-      - name: Vérifier la présence de l'exécutable
+      - name: Vérifier que l'exécutable a été généré
+        shell: powershell
         run: |
           if (Test-Path "build/raylib_project.exe") {
-            Write-Output "L'exécutable est présent."
+            Write-Output "Exécutable généré avec succès."
           } else {
-            Write-Error "L'exécutable est manquant."
+            Write-Error "Exécutable manquant."
             exit 1
           }
