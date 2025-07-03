@@ -81,11 +81,6 @@ mingw32-make
 
 ---
 
-
-
-
----
-
 ## ✅ Intégration Continue
 
 Ce projet est automatiquement compilé sous Windows via GitHub Actions à chaque `push` :
