@@ -43,12 +43,12 @@ jobs:
         shell: cmd
         run: cmake --build build --config Release
 
-      - name: Vérifier que l'exécutable a été généré
+      - name: Vérifier si l'exécutable a été généré
         shell: powershell
         run: |
           if (Test-Path "build/raylib_project.exe") {
-            Write-Output "Exécutable généré avec succès."
+            Write-Output "Exécutable généré."
           } else {
-            Write-Error "Exécutable manquant."
+            Write-Error "Pas d'exécutable"
             exit 1
           }
