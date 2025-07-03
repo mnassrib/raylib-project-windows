@@ -14,33 +14,35 @@ jobs:
       - name: Cloner le dépôt
         uses: actions/checkout@v3
 
-      - name: Installer MinGW via Chocolatey
-        run: choco install mingw -y
+      - name: Installer Chocolatey + MinGW + CMake
+        run: |
+          choco install mingw -y
+          choco install cmake -y --installargs 'ADD_CMAKE_TO_PATH=System'
+        shell: powershell
 
       - name: Ajouter MinGW au PATH
-        shell: powershell
         run: |
-          echo "C:\ProgramData\mingw64\mingw64\bin" | Out-File -Append -Encoding ascii $env:GITHUB_PATH
+          echo "C:\ProgramData\mingw64\mingw64\bin" >> $env:GITHUB_PATH
+        shell: powershell
 
-      - name: Cloner et compiler Raylib
-        shell: cmd
+      - name: Cloner et construire Raylib
         run: |
           git clone https://github.com/raysan5/raylib.git
           cd raylib
-          rmdir /s /q build
           mkdir build
           cd build
           cmake -G "MinGW Makefiles" -DBUILD_EXAMPLES=OFF ..
-          cmake --build .
+          mingw32-make
           cmake --install . --prefix "C:/raylib"
-
-      - name: Configurer le projet
         shell: cmd
-        run: |
-          cmake -B build -G "MinGW Makefiles" -DCMAKE_PREFIX_PATH="C:/raylib"
+
+      - name: Créer le dossier build
+        run: mkdir build
+
+      - name: Configurer le projet avec CMake
+        run: cmake -B build -G "MinGW Makefiles" -DCMAKE_PREFIX_PATH="C:/raylib"
 
       - name: Compiler le projet
-        shell: cmd
         run: cmake --build build --config Release
 
       - name: Vérifier si l'exécutable a été généré
