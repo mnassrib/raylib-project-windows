@@ -20,7 +20,7 @@ raylib-project-windows/
 ├── build/                   # Dossier de compilation (généré)
 └── .github/
     └── workflows/
-        └── ci-windows.yml     # GitHub Actions (Windows)
+        └── ci-windows.yml   # GitHub Actions (Windows)
 
 ````
 
