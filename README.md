@@ -30,46 +30,59 @@ raylib-project-windows/
 
 ### 📌 Prérequis
 
+- [CMake](https://cmake.org/download/) 
 - [MinGW-w64](https://www.mingw-w64.org/)
-- [CMake](https://cmake.org/)
-- Raylib précompilée pour Windows (ZIP)
-- VSCode (optionnel mais recommandé)
+- [Chocolatey](https://chocolatey.org/) (recommandé pour l’installation automatisée)
+- Raylib compilée localement dans `C:/raylib`
 
 > 💡 Raylib ne s’installe pas via `choco` : vous devez la **télécharger manuellement** ou utiliser le [build précompilé ici](https://github.com/raysan5/raylib/releases)
 
 ---
 
-### 🧱 Étapes
+### 🧰 Étapes de configuration
 
-```bash
-# 1. Télécharger Raylib pour MinGW depuis :
-#    https://github.com/raysan5/raylib/releases
-
-# 2. Extraire l’archive, par exemple dans :
-#    C:\raylib
-
-# 3. Vérifier que vous avez :
-#    C:\raylib\include
-#    C:\raylib\lib\libraylib.a
-#    C:\raylib\cmake\raylib-config.cmake
-
-# 4. Cloner ce dépôt
-git clone https://github.com/mnassrib/raylib-project-windows.git
-cd raylib-project
-
-# 5. Créer un dossier de compilation
-mkdir build
-cd build
-
-# 6. Configurer avec CMake
-cmake .. -G "MinGW Makefiles" -DCMAKE_PREFIX_PATH="C:/raylib"
-
-# 7. Compiler
-mingw32-make
-
-# 8. Lancer l’exécutable
-./raylib_project.exe
+1. **Installer Chocolatey (si ce n’est pas déjà fait)**  
+   PowerShell (en mode administrateur) :
+```powershell
+   Set-ExecutionPolicy Bypass -Scope Process -Force
+   iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex
 ```
+
+2. **Installer MinGW et CMake**
+
+   ```powershell
+   choco install mingw -y
+   choco install cmake -y --installargs 'ADD_CMAKE_TO_PATH=System'
+   ```
+
+3. **Compiler et installer Raylib**
+
+   ```cmd
+   git clone https://github.com/raysan5/raylib.git
+   cd raylib
+   mkdir build && cd build
+   cmake -G "MinGW Makefiles" -DBUILD_EXAMPLES=OFF ..
+   mingw32-make
+   cmake --install . --prefix "C:/raylib"
+   ```
+
+---
+
+## 🚀 Compilation du projet
+
+```cmd
+git clone https://github.com/votre-utilisateur/raylib-project-windows.git
+cd raylib-project-windows
+mkdir build && cd build
+cmake -G "MinGW Makefiles" -DCMAKE_PREFIX_PATH="C:/raylib" ..
+mingw32-make
+.\raylib_project.exe
+```
+
+---
+
+
+
 
 ---
 
@@ -83,8 +96,9 @@ Ce projet est automatiquement compilé sous Windows via GitHub Actions à chaque
 
 ## 📄 Ressources utiles
 
-* [Raylib – Documentation](https://www.raylib.com/)
-* [CMake - Documentation](https://cmake.org/documentation/)
+* [Raylib — Site officiel](https://www.raylib.com/)
+* [MinGW-w64](https://www.mingw-w64.org/)
+* [CMake Documentation](https://cmake.org/documentation/)
 
 ---
 
