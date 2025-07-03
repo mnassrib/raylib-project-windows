@@ -43,10 +43,10 @@ raylib-project-windows/
 
 1. **Installer Chocolatey (si ce n’est pas déjà fait)**  
    PowerShell (en mode administrateur) :
-```powershell
+   ```powershell
    Set-ExecutionPolicy Bypass -Scope Process -Force
    iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex
-```
+   ```
 
 2. **Installer MinGW et CMake**
 
