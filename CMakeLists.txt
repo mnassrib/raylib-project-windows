@@ -19,10 +19,12 @@ add_executable(${PROJECT_NAME}
 
 # === Recherche de Raylib ===
 
-# Optionnel : si Raylib a été installé manuellement dans un dossier spécifique
-# (décommenter/modifier si besoin)
-set(RAYLIB_PATH "C:/raylib")
-set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${RAYLIB_PATH}")
+# Configuration spécifique à Windows
+if(WIN32)
+    # Spécifie le chemin de Raylib si installé manuellement/modifier si besoin
+    set(RAYLIB_PATH "C:/raylib")
+    set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${RAYLIB_PATH}")
+endif()
 
 # Recherche de la configuration CMake de Raylib
 find_package(raylib REQUIRED)
