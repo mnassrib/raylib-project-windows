@@ -89,6 +89,17 @@ Ce projet est automatiquement compilé sous Windows via GitHub Actions à chaque
 
 ---
 
+## 🚀 Télécharger l’exécutable précompilé
+
+Après chaque publication (tag Git), une version précompilée de l'exécutable est disponible :
+
+1. Accède à la page des **Releases** ici :
+   🔗 [https://github.com/mnassrib/raylib-project-windows/releases](https://github.com/mnassrib/raylib-project-windows/releases)
+2. Télécharge le fichier **raylib\_project** (ou `.exe` selon l’OS) de la dernière version.
+3. Exécute directement en local le programme sans recompiler.
+
+---
+
 ## 📄 Ressources utiles
 
 * [Raylib — Site officiel](https://www.raylib.com/)
