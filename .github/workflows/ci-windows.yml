@@ -15,6 +15,10 @@ jobs:
       - name: Cloner le dépôt
         uses: actions/checkout@v3
 
+      - name: Déterminer le nom du projet
+        id: project
+        run: echo "name=$(basename $GITHUB_WORKSPACE)" >> "$GITHUB_OUTPUT"
+
       - name: Installer Chocolatey + MinGW + CMake
         run: |
           choco install mingw -y
@@ -49,7 +53,7 @@ jobs:
       - name: Vérifier si l'exécutable a été généré
         shell: powershell
         run: |
-          if (Test-Path "build/raylib_project.exe") {
+          if (Test-Path "build/${{ steps.project.outputs.name }}.exe") { 
             Write-Output "Exécutable généré."
           } else {
             Write-Error "Pas d'exécutable"
@@ -61,6 +65,6 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           name: "Release ${{ github.ref_name }}"
-          files: build/raylib_project.exe
+          files: build/${{ steps.project.outputs.name }}.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
