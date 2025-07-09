@@ -14,10 +14,11 @@ jobs:
     steps:
       - name: Cloner le dépôt
         uses: actions/checkout@v3
-
+      
       - name: Déterminer le nom du projet
         id: project
-        run: echo "name=$(basename $GITHUB_WORKSPACE)" >> "$GITHUB_OUTPUT"
+        shell: bash
+        run: echo "name=$(basename "$GITHUB_WORKSPACE")" >> "$GITHUB_OUTPUT"
 
       - name: Installer Chocolatey + MinGW + CMake
         run: |
@@ -53,7 +54,7 @@ jobs:
       - name: Vérifier si l'exécutable a été généré
         shell: powershell
         run: |
-          if (Test-Path "build/${{ steps.project.outputs.name }}.exe") { 
+          if (Test-Path "build/${{ steps.project.outputs.name }}.exe") {
             Write-Output "Exécutable généré."
           } else {
             Write-Error "Pas d'exécutable"
