@@ -76,7 +76,7 @@ cd raylib-project-windows
 mkdir build && cd build
 cmake -G "MinGW Makefiles" -DCMAKE_PREFIX_PATH="C:/raylib" ..
 mingw32-make
-.\raylib_project.exe
+.\raylib-project-windows.exe
 ```
 
 ---
